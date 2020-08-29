@@ -108,7 +108,7 @@ export default {
     console.log('pages/projects/index.vue: skip =', skip)
 
     try {
-      this.projects = await this.$content('projects').skip(skip).limit(6).fetch()
+      this.projects = await this.$content('projects').skip(skip).limit(postsPerPage).fetch()
 
       const allProjects = await this.$content('projects').fetch()
       let totalPosts = allProjects.length

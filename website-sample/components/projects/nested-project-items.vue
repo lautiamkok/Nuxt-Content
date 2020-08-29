@@ -45,6 +45,41 @@
     </div>
     <!-- row -->
 
+    <!-- row -->
+    <div class="row row-pager" v-if="projects">
+      <div class="grid-container">
+
+        <div class="grid-x grid-padding-x">
+
+          <!-- cell -->
+          <div class="cell small-4">
+            <nuxt-link :to="'/projects-nested/pages/' + prevPage" class="hollow button secondary" v-if="prevPage">
+              Previous
+            </nuxt-link>
+          </div>
+          <!-- cell -->
+
+          <!-- cell -->
+          <div class="cell small-4 text-center">
+            <p v-if="currentPage && totalPages">{{ currentPage }} of {{ totalPages }}</p>
+          </div>
+          <!-- cell -->
+
+          <!-- cell -->
+          <div class="cell small-4 text-right">
+            <nuxt-link :to="'/projects-nested/pages/' + nextPage" class="hollow button secondary" v-if="nextPage">
+              Next
+            </nuxt-link>
+          </div>
+          <!-- cell -->
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- row -->
+
   </div>
 
 </template>
@@ -56,6 +91,10 @@ export default {
   data () {
     return {
       projects: [],
+      totalPages: null,
+      currentPage: null,
+      nextPage: null,
+      prevPage: null,
     }
   },
 
@@ -65,11 +104,24 @@ export default {
     const number = this.$route.params.number
     const pageNumber = number === undefined ? 1 : parseInt(number)
     const skip = number === undefined ? 0 : (pageNumber - 1) * postsPerPage
-    console.log('components/projects-nested/nested-project-items.vue: pageNumber =', pageNumber)
-    console.log('components/projects-nested/nested-project-items.vue: skip =', skip)
+    console.log('components/projects-nested/index.vue: pageNumber =', pageNumber)
+    console.log('components/projects-nested/index.vue: skip =', skip)
 
     try {
       this.projects = await this.$content('projects').skip(skip).limit(postsPerPage).fetch()
+
+      const allProjects = await this.$content('projects').fetch()
+      let totalPosts = allProjects.length
+      let totalMaxPages = Math.ceil(totalPosts / postsPerPage)
+
+      this.totalPages = totalMaxPages
+      this.currentPage = pageNumber
+      this.nextPage = pageNumber === totalMaxPages ? null : pageNumber + 1
+      this.prevPage = pageNumber === 1 ? null : pageNumber - 1
+
+      console.log('components/projects-nested/index.vue: nextPage =', this.nextPage)
+      console.log('components/projects-nested/index.vue: prevPage =', this.prevPage)
+
     } catch (err) {
       throw new Error(err.message)
     }

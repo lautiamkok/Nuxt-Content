@@ -1,5 +1,6 @@
 
 console.log('nuxt.config.js:process.env.BASE_URL =', process.env.BASE_URL)
+console.log('nuxt.config.js:process.env.DEPLOY_ENV =', process.env.DEPLOY_ENV)
 
 // Only add `router.base = '/<repository-name>/'` if `DEPLOY_ENV` is `GH_PAGES`
 const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
@@ -14,6 +15,7 @@ const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
     linkActiveClass: 'current'
   }
 }
+console.log('nuxt.config.js:routerBase =', routerBase)
 
 export default {
   ...routerBase,
