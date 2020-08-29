@@ -25,9 +25,6 @@
 
 export default {
   async asyncData ({ $content, error, route }) {
-    const postsPerPage = 2
-    const number = route.params.number
-
     try {
       const page = await $content('articles', 'projects').fetch()
       return {
